@@ -37,7 +37,7 @@ class ReferenceDataCollectionValueFactory extends AbstractValueFactory
     /**
      * {@inheritdoc}
      */
-    protected function prepareData(AttributeInterface $attribute, $data, $ignoreUnknownData = false)
+    protected function prepareData(AttributeInterface $attribute, $data, bool $ignoreUnknownData = false)
     {
         if (null === $data) {
             $data = [];
@@ -69,18 +69,22 @@ class ReferenceDataCollectionValueFactory extends AbstractValueFactory
         foreach ($data as $referenceDataCode) {
             $referenceData = $repository->findOneBy(['code' => $referenceDataCode]);
 
-            if (null === $referenceData and !$ignoreUnknownData) {
-                throw InvalidPropertyException::validEntityCodeExpected(
-                    $attribute->getCode(),
-                    'reference data code',
-                    sprintf('The code of the reference data "%s" does not exist', $attribute->getReferenceDataName()),
-                    static::class,
-                    $referenceDataCode
-                );
+            if (null === $referenceData) {
+                if (!$ignoreUnknownData) {
+                    throw InvalidPropertyException::validEntityCodeExpected(
+                        $attribute->getCode(),
+                        'reference data code',
+                        sprintf('The code of the reference data "%s" does not exist', $attribute->getReferenceDataName()),
+                        static::class,
+                        $referenceDataCode
+                    );
+                }
             } else {
                 $referenceDataCodes[] = $referenceData->getCode();
             }
         }
+
+        $referenceDataCodes = array_unique($referenceDataCodes);
 
         sort($referenceDataCodes);
 

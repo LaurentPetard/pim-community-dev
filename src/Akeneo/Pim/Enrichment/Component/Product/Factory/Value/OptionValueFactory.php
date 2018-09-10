@@ -52,7 +52,7 @@ class OptionValueFactory extends AbstractValueFactory
         $identifier = $attribute->getCode() . '.' . $data;
         $option = $this->attrOptionRepository->findOneByIdentifier($identifier);
 
-        if (null === $option && !$ignoreUnknownData) {
+        if (null === $option) {
             throw InvalidOptionException::validEntityCodeExpected(
                 $attribute->getCode(),
                 'code',
@@ -62,10 +62,6 @@ class OptionValueFactory extends AbstractValueFactory
             );
         }
 
-        if (null !== $option) {
-            return $option->getCode();
-        } else {
-            return null;
-        }
+        return $option->getCode();
     }
 }

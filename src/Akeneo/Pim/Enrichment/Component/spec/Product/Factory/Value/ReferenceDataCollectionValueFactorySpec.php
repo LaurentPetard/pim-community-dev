@@ -288,6 +288,8 @@ class ReferenceDataCollectionValueFactorySpec extends ObjectBehavior
 
         $repositoryResolver->resolve('fabrics')->willReturn($referenceDataRepository);
         $referenceDataRepository->findOneBy(['code' => 'silk'])->willReturn($silk);
+
+        $silk->getCode()->willReturn('silk');
         $referenceDataRepository->findOneBy(['code' => 'cotton'])->willReturn(null);
 
         $productValue = $this->create(
@@ -301,7 +303,7 @@ class ReferenceDataCollectionValueFactorySpec extends ObjectBehavior
         $productValue->shouldReturnAnInstanceOf(ReferenceDataCollectionValue::class);
         $productValue->shouldHaveAttribute('reference_data_multi_select_attribute');
         $productValue->shouldHaveOnlyOneReferenceData();
-        $productValue->shouldHaveReferenceData([$silk]);
+        $productValue->shouldHaveReferenceData(['silk']);
     }
 
     public function getMatchers()
@@ -326,14 +328,8 @@ class ReferenceDataCollectionValueFactorySpec extends ObjectBehavior
                 return is_array($subject->getData()) && 0 === count($subject->getData());
             },
             'haveReferenceData' => function ($subject, $expected) {
-                $fabrics = $subject->getData();
-
-                $hasFabrics = false;
-                foreach ($fabrics as $fabric) {
-                    $hasFabrics = in_array($fabric, $expected);
-                }
-
-                return $hasFabrics;
+                return empty(array_diff($subject->getData(), $expected))
+                    && empty(array_diff($expected, $subject->getData()));
             },
             'haveReferenceDataSorted' => function ($subject, $expected) {
                 $data = $subject->getData();

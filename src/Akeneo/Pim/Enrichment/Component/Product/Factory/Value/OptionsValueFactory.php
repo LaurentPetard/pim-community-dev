@@ -75,7 +75,7 @@ class OptionsValueFactory extends AbstractValueFactory
             }
         }
 
-        if (!empty($notFoundOptionCodes) && !$ignoreUnknownData) {
+        if (!empty($notFoundOptionCodes)) {
             throw InvalidOptionsException::validEntityListCodesExpected(
                 $attribute->getCode(),
                 'codes',

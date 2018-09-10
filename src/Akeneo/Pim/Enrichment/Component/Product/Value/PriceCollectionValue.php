@@ -74,14 +74,14 @@ class PriceCollectionValue extends AbstractValue implements PriceCollectionValue
      */
     public function __toString(): string
     {
-        $options = [];
+        $priceStrings = [];
         foreach ($this->data as $price) {
             if (null !== $price->getData()) {
-                $options[] = sprintf('%.2F %s', $price->getData(), $price->getCurrency());
+                $priceStrings[] = sprintf('%.2F %s', $price->getData(), $price->getCurrency());
             }
         }
 
-        return implode(', ', $options);
+        return implode(', ', $priceStrings);
     }
 
     /**

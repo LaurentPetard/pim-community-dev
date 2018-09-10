@@ -51,7 +51,7 @@ class MediaValueFactory extends AbstractValueFactory
 
         $fileInfo = $this->fileInfoRepository->findOneByIdentifier($data);
 
-        if (null === $fileInfo && !$ignoreUnknowData) {
+        if (null === $fileInfo) {
             throw InvalidPropertyException::validEntityCodeExpected(
                 $attribute->getCode(),
                 'fileinfo key',

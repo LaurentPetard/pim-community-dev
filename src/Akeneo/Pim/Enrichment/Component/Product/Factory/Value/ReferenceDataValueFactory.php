@@ -4,7 +4,6 @@ namespace Akeneo\Pim\Enrichment\Component\Product\Factory\Value;
 
 use Akeneo\Pim\Enrichment\Component\Product\Factory\Value\AbstractValueFactory;
 use Akeneo\Pim\Enrichment\Component\Product\Model\ReferenceDataInterface;
-use Akeneo\Pim\Enrichment\Component\Product\Repository\ReferenceDataRepositoryInterface;
 use Akeneo\Pim\Enrichment\Component\Product\Repository\ReferenceDataRepositoryResolverInterface;
 use Akeneo\Pim\Structure\Component\Model\AttributeInterface;
 use Akeneo\Tool\Component\StorageUtils\Exception\InvalidPropertyException;
@@ -37,7 +36,7 @@ class ReferenceDataValueFactory extends AbstractValueFactory
     /**
      * {@inheritdoc}
      */
-    protected function prepareData(AttributeInterface $attribute, $data, bool $ignoreUnkownData)
+    protected function prepareData(AttributeInterface $attribute, $data, bool $ignoreUnknownData)
     {
         if (null === $data) {
             return;
@@ -64,10 +63,6 @@ class ReferenceDataValueFactory extends AbstractValueFactory
             );
         }
 
-        if (null !== $referenceData && !$ignoreUnkownData) {
-            return $referenceData->getCode();
-        } else {
-            return null;
-        }
+        return $referenceData->getCode();
     }
 }
