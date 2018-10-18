@@ -26,9 +26,9 @@ interface ProductUniqueDataInterface
 
     public function getRawData(): string;
 
-    public function setAttribute(AttributeInterface $attribute);
+    public function setAttribute(AttributeInterface $attribute): void;
 
-    public function setRawData(string $rawData);
+    public function setRawData(string $rawData): void;
 
     public function isEqual(ProductUniqueDataInterface $uniqueValue):bool;
 }

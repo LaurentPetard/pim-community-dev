@@ -140,7 +140,7 @@ class ProductPdfRenderer implements RendererInterface
         foreach ($this->getAttributeCodes($product, $locale) as $attributeCode) {
             $attribute = $this->attributeRepository->findOneByIdentifier($attributeCode);
 
-            if ($attribute !== null) {
+            if (null !== $attribute) {
                 $groupLabel = $attribute->getGroup()->getLabel();
                 if (!isset($groups[$groupLabel])) {
                     $groups[$groupLabel] = [];

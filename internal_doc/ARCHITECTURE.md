@@ -35,7 +35,7 @@ the user name, the login, the password.
 
 But for our main object, i.e. the product, things are a little bit more complex, as the product itself has different parts
 with pretty strong domain meaning. But still, we could define the product aggregate as the product object itself, with
-all the other objects that belongs to it.
+all the other objects that belong to it.
 
 As an example, a `MetricValue` object, that is part of the Product `ValueCollection`, has a `Metric` object. This `Metric`
 object exclusively belongs to the value, which belongs to product itself. It's not shared and its life cycle is the one of
@@ -48,6 +48,10 @@ Same thing for the `Attribute`. Each product value has a reference to an attribu
 product value.
 
 See http://www.cqrs.nu/Faq/aggregates for even more details.
+
+### Aggregate Root
+
+The Product itself is the root of the aggregate. "Any references from outside the aggregate should only go to the aggregate root. The root can thus ensure the integrity of the aggregate as a whole.", Martin Fowler.
 
 ### Definition
 
@@ -120,10 +124,6 @@ And this has some technical impacts:
 When persisting all the parts of the aggregate, this must be done in one transaction. Indeed, if one object
 of the aggregate cannot be persisted, then the whole aggregate must be rejected, as it's not valid anymore.
 
- -  Accessing objects of the aggregate
-
-To access objects of the aggregate, simple getters can be used. For example, `$myProduct->getValues()`.
-
  - Accessing referenced objects outside of the aggregate
 
 For objects that are not part of the aggregate, we reference them by their identifiers. For example,
@@ -136,13 +136,16 @@ Completenesses represent statistics of the product data state, according to cond
 family level.
 
 If we had an ideal storage system, completeness would not need to be pre-computed and would be used
-directly in filters and read from the persistence system in real time.
+directly in filters and computed from the persistence system in real time.
 
 But as our technical stack doesn't allow this, we need to compute them when products are saved, so
 they can be used for filtering.
 
 They are basically a projection, so they don't belong to the product aggregate, and will be persisted
 during a different transaction.
+
+But in order to avoid inconsistency between product data and calculated completeness, the completenesses
+entries will be deleted prior to the product save.
 
 ### The special case of MediaValue and FileInfo.
 
@@ -152,3 +155,4 @@ the existing file and the new product value.
 
 This behaviour only exists for technical reasons, so it doesn't have an impact on the aggregate itself.
 
+In the future, we may remove this behavior, to simplify the code as well as avoid confusing functional behavior.
