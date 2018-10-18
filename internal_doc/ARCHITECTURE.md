@@ -30,7 +30,7 @@ To go towards this direction, we began to split the code into big set of feature
 According to Martin Fowler, "A DDD aggregate is a cluster of domain objects that can be treated as a single unit."
 (https://martinfowler.com/bliki/DDD_Aggregate.html).
 
-For most object, the aggregate definition is pretty simple: a User is a single unit that has is own properties, like
+For most objects, the aggregate definition is pretty simple: a User is a single unit that has is own properties, like
 the user name, the login, the password.
 
 But for our main object, i.e. the product, things are a little bit more complex, as the product itself has different parts
